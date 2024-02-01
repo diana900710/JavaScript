@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../Modules_/helpers.js"></script>
+</head>
+
+<body>
+    <h1>Cookie解析</h1>
+
+    <button onclick="displayCookie()">Get Cookie</button>
+    <div id="msg"></div>
+
+    <script>
+        window.onload = setCookies;
+
+        //設定Cookies
+        function setCookies() {
+            document.cookie = "name=Kevin";
+            document.cookie = "email=kevin@gmail.com"
+            document.cookie = "theme=drak";
+
+            console.log(document.cookie);
+        }
+
+        function displayCookie() {
+            $g("#msg").innerHTML = getCookie("name") + "," + getCookie("email") + ", " + getCookie("gender");
+            //$g("#msg").innerHTML = getCookie("gender");
+        }
+
+        let cookieArray, cookie2DArray;
+        const cookieObject = {};
+
+        function getCookie(name) {
+            //讀取cookies
+            let cookies = document.cookie;
+            //'name=奚江華; email=kevin@gmail.com; theme=drak'
+
+            //用;分號將字串拆分為陣列元素
+            cookieArray = cookies.split(';');
+            // ['name=奚江華', ' email=kevin@gmail.com', ' theme=drak']
+
+            //找尋陣列中含有cookieName的元素
+            //let result = cookieArray.find(item => item.indexOf(name) != -1);
+            //檢測cookie找不到時為undefined
+            //if (result === undefined) { return "Can't find the cookie"; }
+            //let cookieValue = result.substring(result.indexOf("=") + 1, result.length);
+            
+            //以等號再拆分
+            cookie2DArray = cookieArray.map(x=>x.trim().split("="));
+            //[["name","奚江華"],["email","kevin@gmail.com"],["theme","drak"]]
+            /*
+            let cookie2DArray = cookieArray.map(function(item){
+                return item.trim().split("=");
+            });
+            */
+            
+            //建立Cookie物件
+            cookie2DArray.forEach(item=>{
+                cookieObject[item[0]]=item[1];
+                //cookieObject["name"]=item["奚江華"];
+            });
+
+            return cookieObject[name]!==undefined?cookieObject[name]:`找不到cookie-${name}`;
+        }
+    </script>
+</body>
+
+</html>

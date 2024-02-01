@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>顯示全名</button>
+    <button id="btnFullName">顯示全名 FullName = Firstname + Lastname</button>
+    <script type="module">
+        import {$g as $got} from "../Modules_/helpers.js";
+            /*變數 as 變數名稱--更名*/
+        let btnShowname, btnFullName;
+        let h1, ps, ul, btn;
+        window.onload=function(){
+            btnShowname=$got("button")[0];
+            btnShowname.addEventListener("click", showName);
+
+            btnFullName = $got("#btnFullName");
+            btnFullName.addEventListener("click", showFullName.bind(event, "樂門樂曼", "大地拉邦"));
+        }
+        function showName(){
+            alert("Hi..我是阿樂");
+        }
+        function showFullName(firstName, lastName){
+            alert(`${firstName} - ${lastName}`);
+        }
+    </script>
+</body>
+</html>

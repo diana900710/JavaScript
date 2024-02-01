@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{display: flex;flex-wrap: wrap;}
+    </style>
+</head>
+<body>
+    <div>
+        <div id="container"></div>
+    </div>
+
+    <script>
+        let champion = {};
+        let heroObject = {}, heroArray = [];
+        let heroDataArray = [];
+        const url = "https://ddragon.leagueoflegends.com/cdn/10.22.1/data/zh_TW/champion.json";
+        const url404 = "https://ddragon.leagueoflegends.com/cdn/10.22/data/zh_TW/champion.json";
+        window.onload=function(){
+            // fetchData();
+            fetchJson(url);
+        }
+
+        //未接收參數
+        function fetchData(){
+            fetch(url)
+                .then(response=>response.text())
+                .then(result=>{
+                    document.getElementById("container").innerText = result;
+                });
+        }
+        function fetchJson(uri){
+            fetch(uri)
+                .then(function(response){
+                    if(!response.ok){
+                        const err = new Error(`找不到資源檔 : ${uri}`);
+                        err.response = response;
+                        throw err;
+                    }else{
+                        return response.json();
+                    }
+                })
+                .then(result=>{
+                    // document.getElementById("container").innerText = result;
+                    champion = result;
+                    
+                    heroObject = champion.data;
+
+                    heroArray = Object.keys(heroObject);
+                    let valueArray = Object.values(heroObject);
+
+                    // console.log(heroArray);
+                    // console.log(valueArray);
+                    heroArray.forEach((heroName, index)=>{
+                        let hero = heroObject[heroName];
+                        console.log(`${index}. ${hero.id}, ${hero.stats.hp}, ${hero.stats.movespeed}, ${hero.stats.spellblock}, ${hero.stats.attackrange}`);
+
+                        heroDataArray.push({
+                            id : hero.id,
+                            hp : hero.stats.hp,
+                            movespeed : hero.stats.movespeed,
+                            spellblock : hero.stats.spellblock,
+                            attackrange : hero.stats.attackrange
+                        });
+                        
+                    });
+
+                    console.log('-'.repeat(80));
+                    valueArray.forEach((hero, index)=>{
+                        //物件解構
+                        let { id, name, stats: { hp}, stats: { movespeed} , stats: { spellblock}, stats: { attackrange}} = hero;
+                        let statsKey = Object.keys(hero.stats);
+                        // console.log(statsKey);
+                        // document.body.append(`${index}. ${id}, ${hp}, ${movespeed}, ${spellblock}, ${attackrange}`);
+                        document.body.innerHTML +=`<div style="width:400px; height:500px;margin: 5px; padding: 10px; border: 1px solid #000;"><h1>${index+1}. ${id}-${name}</h1><img style="width: 400px" src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${id}_0.jpg"> <h2>${statsKey[0]}:${hp}<br> ${statsKey[4]}:${movespeed}<br> ${statsKey[7]}:${spellblock}<br> ${statsKey[9]}:${attackrange}</h2></div>`;
+
+                        
+                    });
+                })
+                .catch(ex => {
+                    console.dir(ex);
+                    console.log(ex.response);
+                    document.body.append(ex.message);
+                });
+        }
+    </script>
+</body>
+</html>

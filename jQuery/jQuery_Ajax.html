@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        div div{
+            display: block;
+            /* height: 300px; */
+        }
+        img{
+            width: 450px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>$.ajax</h1> 
+    <div id="container"></div>
+    <script src="https://code.jquery.com/jquery-3.6.4.js" 
+            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
+    </script>
+    <script> 
+        const url = "https://ddragon.leagueoflegends.com/cdn/10.22.1/data/zh_TW/champion.json";
+
+        $.ajax({
+            url : url,
+            method: "GET",
+            dataType: "json"
+        })
+            .done(function(result){
+                championsObject = result.data;
+                $.each(championsObject, function(key, value){
+                    let imgurl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${key}_0.jpg`;
+
+                    let h1 = $("<h1></h1>").text(key);
+                    let img = $("<img>").attr("src", imgurl);
+                    let div = $("<div></div>").append(img);
+                    $("#container").append(div);
+                });
+            });
+    </script>
+</body>
+</html>
